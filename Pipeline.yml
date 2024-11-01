@@ -12,6 +12,16 @@ variables:
                        '/p:ServerPassword=$(ServerPassword) '  
                        '/t:Update'
 
+  BuildAllMSBuildScript: |
+                         '"$(MSBuildPath)\\MSBuild.exe" "msbuild\\BuildAll.msbuild" ' 
+                         '/p:KBPath="$(LocalKBPath)" '
+                         '/p:ForceRebuild="false" ' 
+                         '/p:CompileMains="true" '
+                         '/p:DetailedNavigation="false" '  
+                         '/p:FailIfReorg="false" '
+                         '/p:DoNotExecuteReorg="false" ' 
+                         '/t:Build'
+
 trigger:
   branches:
     include:
@@ -33,19 +43,17 @@ stages:
               targetType: 'inline'
               script: "$(UpdateMSBuildScript)"
 
-  # - stage: Build
-  #   displayName: "Build de GeneXus KB"
-  #   dependsOn: UpdateFromServer
-  #   jobs:
-  #     - job: BuildJob
-  #       displayName: "Build GeneXus KB"
-  #       steps:
-  #         - task: PowerShell@2
-  #           inputs:
-  #             targetType: 'inline'
-  #             script: |
-  #               # Comando de GeneXus para construir la KB
-  #               & 'C:\Program Files (x86)\GeneXus\GeneXus18\gxcmd.exe' /build /kblocation:"C:\path\to\KB"
+  - stage: BuildKB 
+    displayName: "Build de GeneXus KB"
+    dependsOn: UpdateFromGXServer
+    jobs:
+      - job: BuildJob
+        displayName: "Build GeneXus KB"
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: "$(BuildAllMSBuildScript)"
 
   # - stage: Deploy
   #   displayName: "Despliegue al ambiente de desarrollo"
