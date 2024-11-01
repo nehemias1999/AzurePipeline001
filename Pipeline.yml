@@ -5,10 +5,11 @@ variables:
   ServerUserName: "sa_jenkins_genexus"
   ServerPassword: '567NTb0L4L4wjK4hZkAl'
 
-  updateMSBuildScript: '"$(MSBuildPath)\\MSBuild.exe" "msbuild\\Update.msbuild" ',
-                       '/p:KBPath="$(LocalKBPath)_" ',
-                       '/p:ServerUserName=$(ServerUserName) ',
-                       '/p:ServerPassword=$(ServerPassword) ', 
+  UpdateMSBuildScript: |
+                      '"$(MSBuildPath)\\MSBuild.exe" "msbuild\\Update.msbuild" ' 
+                       '/p:KBPath="$(LocalKBPath)_" ' 
+                       '/p:ServerUserName=$(ServerUserName) ' 
+                       '/p:ServerPassword=$(ServerPassword) '  
                        '/t:Update'
 
 trigger:
@@ -30,7 +31,7 @@ stages:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: "$(updateMSBuildScript)"
+              script: "$(UpdateMSBuildScript)"
 
   # - stage: Build
   #   displayName: "Build de GeneXus KB"
