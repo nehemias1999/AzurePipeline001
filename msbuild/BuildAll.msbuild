@@ -1,0 +1,19 @@
+
+<Project DefaultTargets="OpenKnowledgeBase" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!-- Asegurate de que el archivo .targets este disponible y contenga las definiciones necesarias -->
+    <Import Project="C:\Program Files (x86)\GeneXus\GeneXus18U9\Genexus.Server.Tasks.targets" />
+    <Import Project="C:\Program Files (x86)\GeneXus\GeneXus18U9\Genexus.Tasks.targets" />
+    
+    <Target Name="OpenKnowledgeBase">
+        <OpenKnowledgeBase Directory="$(KBPath)" />
+    </Target>
+
+    <Target Name="Build" DependsOnTargets="OpenKnowledgeBase">
+        <BuildAll 
+            ForceRebuild="$(ForceRebuild)" 
+            CompileMains="$(CompileMains)"  
+            DetailedNavigation="$(DetailedNavigation)"  
+            FailIfReorg="$(FailIfReorg)"
+            DoNotExecuteReorg="$(DoNotExecuteReorg)"/>
+    </Target>
+</Project>

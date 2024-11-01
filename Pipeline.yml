@@ -1,14 +1,28 @@
+variables:
+
+  MSBuildPath: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin"
+  LocalKBPath: "C:\\Models\\Estimaciones"
+  ServerUserName: "sa_jenkins_genexus"
+  ServerPassword: '567NTb0L4L4wjK4hZkAl'
+
+  updateMSBuildScript: '"$(MSBuildPath)\\MSBuild.exe" "msbuild\\Update.msbuild" ' +
+                       '/p:KBPath="$(LocalKBPath)_" ' +
+                       '/p:ServerUserName=$(ServerUserName) ' +
+                       '/p:ServerPassword=$(ServerPassword) ' + 
+                       '/t:Update'
+
 trigger:
   branches:
     include:
       - main
 
 pool:
-  name: 'MySelfHostedPool' # Cambia esto al nombre del pool de agentes auto-hospedado donde GeneXus está instalado
+  name: 'AzureAgent'
 
 stages:
-  - stage: UpdateFromServer
-    displayName: "Actualizar KB desde el servidor"
+
+  - stage: UpdateFromGXServer
+    displayName: "Actualizar KB desde GXServer"
     jobs:
       - job: UpdateJob
         displayName: "Update GeneXus KB"
@@ -16,36 +30,34 @@ stages:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: |
-                # Comando de GeneXus para actualizar desde el servidor
-                & 'C:\Program Files (x86)\GeneXus\GeneXus18\gxcmd.exe' /updatefromserver /kblocation:"C:\path\to\KB" /user:YourUsername /password:YourPassword
+              script: "$(updateMSBuildScript)"
 
-  - stage: Build
-    displayName: "Build de GeneXus KB"
-    dependsOn: UpdateFromServer
-    jobs:
-      - job: BuildJob
-        displayName: "Build GeneXus KB"
-        steps:
-          - task: PowerShell@2
-            inputs:
-              targetType: 'inline'
-              script: |
-                # Comando de GeneXus para construir la KB
-                & 'C:\Program Files (x86)\GeneXus\GeneXus18\gxcmd.exe' /build /kblocation:"C:\path\to\KB"
+  # - stage: Build
+  #   displayName: "Build de GeneXus KB"
+  #   dependsOn: UpdateFromServer
+  #   jobs:
+  #     - job: BuildJob
+  #       displayName: "Build GeneXus KB"
+  #       steps:
+  #         - task: PowerShell@2
+  #           inputs:
+  #             targetType: 'inline'
+  #             script: |
+  #               # Comando de GeneXus para construir la KB
+  #               & 'C:\Program Files (x86)\GeneXus\GeneXus18\gxcmd.exe' /build /kblocation:"C:\path\to\KB"
 
-  - stage: Deploy
-    displayName: "Despliegue al ambiente de desarrollo"
-    dependsOn: Build
-    jobs:
-      - job: DeployJob
-        displayName: "Deploy GeneXus KB"
-        steps:
-          - task: PowerShell@2
-            inputs:
-              targetType: 'inline'
-              script: |
-                # Comando de despliegue específico; este comando puede variar según el ambiente de desarrollo
-                # Ejemplo: Copiar archivos al servidor IIS o ejecutar script de despliegue en Docker
-                # Ejemplo para IIS:
-                Copy-Item -Path "C:\path\to\KB\output" -Destination "\\DevServer\inetpub\wwwroot\YourApp" -Recurse -Force
+  # - stage: Deploy
+  #   displayName: "Despliegue al ambiente de desarrollo"
+  #   dependsOn: Build
+  #   jobs:
+  #     - job: DeployJob
+  #       displayName: "Deploy GeneXus KB"
+  #       steps:
+  #         - task: PowerShell@2
+  #           inputs:
+  #             targetType: 'inline'
+  #             script: |
+  #               # Comando de despliegue específico; este comando puede variar según el ambiente de desarrollo
+  #               # Ejemplo: Copiar archivos al servidor IIS o ejecutar script de despliegue en Docker
+  #               # Ejemplo para IIS:
+  #               Copy-Item -Path "C:\path\to\KB\output" -Destination "\\DevServer\inetpub\wwwroot\YourApp" -Recurse -Force
