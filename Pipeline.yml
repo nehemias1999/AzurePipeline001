@@ -18,7 +18,7 @@ trigger:
       - main
 
 pool:
-  name: 'AzureAgent'
+  name: 'AzureAgentPool'
 
 stages:
 
