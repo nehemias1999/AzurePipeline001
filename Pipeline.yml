@@ -38,7 +38,6 @@ stages:
       - job: UpdateJob
         displayName: "Update GeneXus KB"
         steps:
-          - task: PowerShell@2
             inputs:
               targetType: 'inline'
               script: $(UpdateMSBuildScript)
@@ -50,7 +49,6 @@ stages:
       - job: BuildJob
         displayName: "Build GeneXus KB"
         steps:
-          - task: PowerShell@2
             inputs:
               targetType: 'inline'
               script: $(BuildAllMSBuildScript)
