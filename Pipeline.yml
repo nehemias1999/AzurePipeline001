@@ -1,0 +1,51 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: 'MySelfHostedPool' # Cambia esto al nombre del pool de agentes auto-hospedado donde GeneXus está instalado
+
+stages:
+  - stage: UpdateFromServer
+    displayName: "Actualizar KB desde el servidor"
+    jobs:
+      - job: UpdateJob
+        displayName: "Update GeneXus KB"
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Comando de GeneXus para actualizar desde el servidor
+                & 'C:\Program Files (x86)\GeneXus\GeneXus18\gxcmd.exe' /updatefromserver /kblocation:"C:\path\to\KB" /user:YourUsername /password:YourPassword
+
+  - stage: Build
+    displayName: "Build de GeneXus KB"
+    dependsOn: UpdateFromServer
+    jobs:
+      - job: BuildJob
+        displayName: "Build GeneXus KB"
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Comando de GeneXus para construir la KB
+                & 'C:\Program Files (x86)\GeneXus\GeneXus18\gxcmd.exe' /build /kblocation:"C:\path\to\KB"
+
+  - stage: Deploy
+    displayName: "Despliegue al ambiente de desarrollo"
+    dependsOn: Build
+    jobs:
+      - job: DeployJob
+        displayName: "Deploy GeneXus KB"
+        steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Comando de despliegue específico; este comando puede variar según el ambiente de desarrollo
+                # Ejemplo: Copiar archivos al servidor IIS o ejecutar script de despliegue en Docker
+                # Ejemplo para IIS:
+                Copy-Item -Path "C:\path\to\KB\output" -Destination "\\DevServer\inetpub\wwwroot\YourApp" -Recurse -Force
