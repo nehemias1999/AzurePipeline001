@@ -6,21 +6,21 @@ variables:
   ServerPassword: '567NTb0L4L4wjK4hZkAl'
 
   UpdateMSBuildScript: |
-                      '"$(MSBuildPath)\\MSBuild.exe" "msbuild\\Update.msbuild" ' 
-                       '/p:KBPath="$(LocalKBPath)_" ' 
-                       '/p:ServerUserName=$(ServerUserName) ' 
-                       '/p:ServerPassword=$(ServerPassword) '  
-                       '/t:Update'
+                       "$(MSBuildPath)\\MSBuild.exe" "msbuild\\Update.msbuild" 
+                       /p:KBPath="$(LocalKBPath)_" 
+                       /p:ServerUserName=$(ServerUserName) 
+                       /p:ServerPassword=$(ServerPassword)  
+                       /t:Update
 
   BuildAllMSBuildScript: |
-                         '"$(MSBuildPath)\\MSBuild.exe" "msbuild\\BuildAll.msbuild" ' 
-                         '/p:KBPath="$(LocalKBPath)" '
-                         '/p:ForceRebuild="false" ' 
-                         '/p:CompileMains="true" '
-                         '/p:DetailedNavigation="false" '  
-                         '/p:FailIfReorg="false" '
-                         '/p:DoNotExecuteReorg="false" ' 
-                         '/t:Build'
+                         "$(MSBuildPath)\\MSBuild.exe" "msbuild\\BuildAll.msbuild" 
+                         /p:KBPath="$(LocalKBPath)"
+                         /p:ForceRebuild="false"
+                         /p:CompileMains="true"
+                         /p:DetailedNavigation="false"
+                         /p:FailIfReorg="false"
+                         /p:DoNotExecuteReorg="false" 
+                         /t:Build
 
 trigger:
   branches:
@@ -41,7 +41,7 @@ stages:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: "$(UpdateMSBuildScript)"
+              script: $(UpdateMSBuildScript)
 
   - stage: BuildKB 
     displayName: "Build de GeneXus KB"
@@ -53,7 +53,7 @@ stages:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: "$(BuildAllMSBuildScript)"
+              script: $(BuildAllMSBuildScript)
 
   # - stage: Deploy
   #   displayName: "Despliegue al ambiente de desarrollo"
