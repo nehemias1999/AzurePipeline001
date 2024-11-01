@@ -6,14 +6,14 @@ variables:
   ServerPassword: '567NTb0L4L4wjK4hZkAl'
 
   UpdateMSBuildScript: |
-                       "$(MSBuildPath)\\MSBuild.exe" \"msbuild\\Update.msbuild\" 
+                       "$(MSBuildPath)\\MSBuild.exe" ".\msbuild\Update.msbuild" 
                        /p:KBPath="$(LocalKBPath)_" 
                        /p:ServerUserName=$(ServerUserName) 
                        /p:ServerPassword=$(ServerPassword)  
                        /t:Update
 
   BuildAllMSBuildScript: |
-                         "$(MSBuildPath)\\MSBuild.exe" "\msbuild\\BuildAll.msbuild\" 
+                         "$(MSBuildPath)\\MSBuild.exe" ".\msbuild\BuildAll.msbuild" 
                          /p:KBPath="$(LocalKBPath)"
                          /p:ForceRebuild="false"
                          /p:CompileMains="true"
