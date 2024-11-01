@@ -39,7 +39,7 @@ stages:
         displayName: "Update GeneXus KB"
         steps:
           - powershell: |
-              & "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" "C:\Users\nsalazar\Documents\Git\Azure_Pipelines\Pruebas\AzurePipeline001\msbuild\Update.msbuild" /p:KBPath="$(LocalKBPath)" /p:ServerUserName=$(ServerUserName) /p:ServerPassword=$(ServerPassword) /t:Update 
+              & "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" "msbuild\Update.msbuild" /p:KBPath="$(LocalKBPath)" /p:ServerUserName=$(ServerUserName) /p:ServerPassword=$(ServerPassword) /t:Update 
 
   # - stage: BuildKB 
   #   displayName: "Build de GeneXus KB"
