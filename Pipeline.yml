@@ -38,9 +38,7 @@ stages:
       - job: UpdateJob
         displayName: "Update GeneXus KB"
         steps:
-            inputs:
-              targetType: 'inline'
-              script: $(UpdateMSBuildScript)
+          script: $(UpdateMSBuildScript)
 
   - stage: BuildKB 
     displayName: "Build de GeneXus KB"
@@ -49,9 +47,7 @@ stages:
       - job: BuildJob
         displayName: "Build GeneXus KB"
         steps:
-            inputs:
-              targetType: 'inline'
-              script: $(BuildAllMSBuildScript)
+          script: $(BuildAllMSBuildScript)
 
   # - stage: Deploy
   #   displayName: "Despliegue al ambiente de desarrollo"
