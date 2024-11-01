@@ -38,7 +38,7 @@ stages:
       - job: UpdateJob
         displayName: "Update GeneXus KB"
         steps:
-          script: $(UpdateMSBuildScript)
+          - powershell: $(UpdateMSBuildScript) 
 
   - stage: BuildKB 
     displayName: "Build de GeneXus KB"
@@ -47,7 +47,7 @@ stages:
       - job: BuildJob
         displayName: "Build GeneXus KB"
         steps:
-          script: $(BuildAllMSBuildScript)
+          - powershell: $(BuildAllMSBuildScript)
 
   # - stage: Deploy
   #   displayName: "Despliegue al ambiente de desarrollo"
