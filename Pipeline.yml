@@ -1,7 +1,7 @@
 variables:
 
-  MSBuildPath: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin"
-  LocalKBPath: "C:\\Models\\Estimaciones"
+  MSBuildPath: "C:\Program Files (x86)\MSBuild\14.0\Bin"
+  LocalKBPath: "C:\KBs\Estimaciones"
   ServerUserName: "sa_jenkins_genexus"
   ServerPassword: '567NTb0L4L4wjK4hZkAl'
 
